@@ -1,10 +1,13 @@
-##Overview
+Overview
+========
 
 The solution is an iterative version of Depth First Search (DFS) algorithm.
 
 The API consist of a single endpoint:
 
-`POST /labescape`
+```
+POST /labescape
+```
 
 that accepts 3 arguments (**it is assumed the input is well formed**):
 - staring coordinate x (horizontal lines)
@@ -18,7 +21,8 @@ If no escape available a response with "No escape path!" message body is returne
 
 Examples:
 
-#####Example 1: Escape path not found
+Example 1: Escape path not found
+--------------------------------
 
 **Request url**
 ```
@@ -57,7 +61,8 @@ POST /labescape
 
  	
 
-#####Example 2: Escape path impossible
+Example 2: Escape path impossible
+---------------------------------
 
 **Request url**
 ```
@@ -87,22 +92,30 @@ POST /labescape
 |------------|------------------------|
 |200         | Escape path missing    |
 
-##Testing instructions
+Testing instructions
+====================
 
 1. For Unit tests run the following command:
     
-        `./gradlew clean test`
+```
+./gradlew clean test
+```
     
 2. For Integration tests run the following command:
 
-        `./gradlew clean itest`
+```
+./gradlew clean itest
+```
     
-    There are test data files in `data` directory that are used in integration tests to simulate simultaneous requests with big data sets (see `large.txt`).
+There are test data files in `data` directory that are used in integration tests to simulate simultaneous requests with big data sets (see `large.txt`).
      
-##Running instructions
+Running instructions
+======================
 
 Please run the following:
 
-    `./gradlew run`
+```
+./gradlew run
+```
 
 And the server will be available under the following address: `http://localhost:8081/labescape`
