@@ -23,10 +23,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.stream.IntStream;
 
 import static java.util.concurrent.Executors.newCachedThreadPool;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -48,15 +50,15 @@ public class LabEscapeITest {
 
     @Test
     public void shouldCopeUnderLoad() throws Exception {
-
         InputStream inputDataStream = Files.newInputStream(FileSystems.getDefault().getPath("data", "large.txt"));
         byte[] byteInput= IOUtils.toByteArray(inputDataStream);
 
-        IntStream.range(0, 100).parallel().forEach(e -> {
+        IntStream.range(0, 1000).parallel().forEach(e -> {
             try {
+
                 CloseableHttpClient client = HttpClients.createDefault();
                 HttpPost httpPost = new HttpPost("http://0.0.0.0:8081/labescape");
-                httpPost.setEntity(new ByteArrayEntity(byteInput, ContentType.TEXT_PLAIN));
+                httpPost.setEntity(new ByteArrayEntity(Arrays.copyOf(byteInput, byteInput.length), ContentType.TEXT_PLAIN));
 
                 CloseableHttpResponse response = client.execute(httpPost);
 
