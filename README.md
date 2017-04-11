@@ -12,7 +12,7 @@ that accepts 3 arguments (it is assumed the input is well formed):
 and is responsible for finding an escape path and returning: 
 - the given labyrinth with the path applied to it.
 
-If no escape available a response with "Impossible!" message body is returned.
+If no escape available a response with "No escape path!" message body is returned.
 
 Examples:
 
@@ -85,9 +85,14 @@ POST /labescape
 |------------|------------------------|
 |200         | Escape path missing    |
 
- 
- Task notes:
- 
- Using the framework(s) of your choice (if any) we'd like you to implement a relatively simple API over HTTP which accepts a "maze" structure as input, along with starting point, and returns the solution to said maze. 
-  
- Please use the following repository as a starting point - https://drive.google.com/file/d/0B2lsiqNiQJt7UXhsandBRmxnb3M/view?usp=sharing - we'd like you to implement the drawPathForEscape method in the LabEscape class. The README.md covers what you should output, and I'd certainly like to see how you approach this from a unit testing angle.
+**Testing instructions**
+
+1. For Unit tests run the following command:
+
+    `./gradlew clean test`
+    
+2. For Integration tests run the following command:
+
+    `./gradlew clean itest`
+    
+    There are test data files in `data` directory that are used in integration tests to simulate simultaneous requests with big data sets (see `large.txt`). 
