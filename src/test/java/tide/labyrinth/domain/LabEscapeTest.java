@@ -36,6 +36,21 @@ public class LabEscapeTest {
 
         assertThat(escapePath, is(equalTo(correctEscapePath)));
     }
+    @Test
+    public void shouldHandleOneNodeLabyrinth() throws Exception {
+
+        char[][] labyrinth = new char[][]{
+                {'O','O','O'},
+                {'O',' ','O'}};
+
+        char[][] escapePath = labEscape.drawPathForEscape(labyrinth, 1, 1);
+
+        char[][] correctEscapePath = new char[][]{
+                {'O','O','O'},
+                {'O','•','O'}};
+
+        assertThat(escapePath, is(equalTo(correctEscapePath)));
+    }
 
     @Test
     public void shouldHandleSparseLabyrinth() throws Exception {
@@ -57,6 +72,30 @@ public class LabEscapeTest {
                 {'O','•',' ',' ','O'},
                 {'O','•',' ',' ','O'},
                 {'O','O','O','O','O'}};
+
+        assertThat(escapePath, is(equalTo(correctEscapePath)));
+    }
+
+    @Test
+    public void shouldHandleLabyrinthWithOneDiagonal() throws Exception {
+
+        char[][] labyrinth = new char[][]{
+                {'O','O','O','O','O','O'},
+                {'O',' ',' ',' ',' ','O'},
+                {'O',' ',' ','O',' ','O'},
+                {' ',' ','O',' ',' ','O'},
+                {'O','O',' ',' ',' ','O'},
+                {'O','O','O','O','O','O'}};
+
+        char[][] escapePath = labEscape.drawPathForEscape(labyrinth, 4, 2);
+
+        char[][] correctEscapePath = new char[][]{
+                {'O','O','O','O','O','O'},
+                {'O','•','•','•','•','O'},
+                {'O','•',' ','O','•','O'},
+                {'•','•','O',' ','•','O'},
+                {'O','O','•','•','•','O'},
+                {'O','O','O','O','O','O'}};
 
         assertThat(escapePath, is(equalTo(correctEscapePath)));
     }
