@@ -88,11 +88,17 @@ POST /labescape
 **Testing instructions**
 
 1. For Unit tests run the following command:
-
-    `./gradlew clean test`
+    
+        `./gradlew clean test`
     
 2. For Integration tests run the following command:
 
-    `./gradlew clean itest`
+        `./gradlew clean itest`
     
-    There are test data files in `data` directory that are used in integration tests to simulate simultaneous requests with big data sets (see `large.txt`). 
+    There are test data files in `data` directory that are used in integration tests to simulate simultaneous requests with big data sets (see `large.txt`).
+     
+**Running instructions**
+
+Please run the following:
+
+    `./gradlew -PmainClass=tide.labyrinth.Main execute`
