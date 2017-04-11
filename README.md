@@ -6,7 +6,7 @@ The API consist of a single endpoint:
 
 `POST /labescape`
 
-that accepts 3 arguments (it is assumed the input is well formed):
+that accepts 3 arguments (**it is assumed the input is well formed**):
 - staring coordinate x (horizontal lines)
 - staring coordinate y (vertical lines)
 - the labyrinth to escape
