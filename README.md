@@ -5,7 +5,9 @@ The solution is an iterative version of Depth First Search (DFS) algorithm.
 
 The API consist of a single endpoint:
 
-`POST /labescape`
+```
+POST /labescape
+```
 
 that accepts 3 arguments (**it is assumed the input is well formed**):
 - staring coordinate x (horizontal lines)
@@ -95,19 +97,25 @@ Testing instructions
 
 1. For Unit tests run the following command:
     
-        `./gradlew clean test`
+```
+./gradlew clean test
+```
     
 2. For Integration tests run the following command:
 
-        `./gradlew clean itest`
+```
+./gradlew clean itest
+```
     
-    There are test data files in `data` directory that are used in integration tests to simulate simultaneous requests with big data sets (see `large.txt`).
+There are test data files in `data` directory that are used in integration tests to simulate simultaneous requests with big data sets (see `large.txt`).
      
 Running instructions
 ======================
 
 Please run the following:
 
-    `./gradlew run`
+```
+./gradlew run
+```
 
 And the server will be available under the following address: `http://localhost:8081/labescape`
