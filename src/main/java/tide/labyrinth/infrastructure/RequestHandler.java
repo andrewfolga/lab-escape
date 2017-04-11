@@ -5,7 +5,6 @@ import com.sun.net.httpserver.HttpHandler;
 import org.springframework.stereotype.Component;
 import tide.labyrinth.domain.LabEscape;
 import tide.labyrinth.domain.NoEscapeException;
-import tide.labyrinth.domain.PathFinder;
 
 import javax.annotation.Resource;
 import java.io.BufferedInputStream;

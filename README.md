@@ -1,3 +1,5 @@
+##Overview
+
 The solution is an iterative version of Depth First Search (DFS) algorithm.
 
 The API consist of a single endpoint:
@@ -39,10 +41,10 @@ POST /labescape
 
 
 	OOOOOOOOOO
-	O****O***O
-	O*OO*O*O*O
-	O* O*O*O*O
-	O OO***O**
+	O••••O•••O
+	O•OO•O•O•O
+	O• O•O•O•O
+	O OO•••O••
 	O OOOOOOOO
 	O        O
 	OOOOOOOOOO
@@ -85,7 +87,7 @@ POST /labescape
 |------------|------------------------|
 |200         | Escape path missing    |
 
-**Testing instructions**
+##Testing instructions
 
 1. For Unit tests run the following command:
     
@@ -97,8 +99,10 @@ POST /labescape
     
     There are test data files in `data` directory that are used in integration tests to simulate simultaneous requests with big data sets (see `large.txt`).
      
-**Running instructions**
+##Running instructions
 
 Please run the following:
 
-    `./gradlew -PmainClass=tide.labyrinth.Main execute`
+    `./gradlew run`
+
+And the server will be available under the following address: `http://localhost:8081/labescape`

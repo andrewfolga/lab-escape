@@ -3,6 +3,8 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 compileJava.options.compilerArgs << "-XDignore.symbol.file"
+apply plugin:'application'
+mainClassName = "tide.labyrinth.Main"
 
 sourceCompatibility = 1.8
 
@@ -53,9 +55,4 @@ itest.mustRunAfter test
 
 tasks.withType(Test) {
     reports.html.destination = file("${reporting.baseDir}/${name}")
-}
-
-task execute(type:JavaExec) {
-    main = mainClass
-    classpath = sourceSets.main.runtimeClasspath
 }

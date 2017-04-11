@@ -52,7 +52,7 @@ public class LabEscapeITest {
         InputStream inputDataStream = Files.newInputStream(FileSystems.getDefault().getPath("data", "large.txt"));
         byte[] byteInput= IOUtils.toByteArray(inputDataStream);
 
-        IntStream.range(0, 1000).parallel().forEach(e -> {
+        IntStream.range(0, 100).parallel().forEach(e -> {
             try {
                 CloseableHttpClient client = HttpClients.createDefault();
                 HttpPost httpPost = new HttpPost("http://0.0.0.0:8081/labescape");
