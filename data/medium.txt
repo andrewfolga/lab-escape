@@ -1,0 +1,22 @@
+1 1
+OOOOOOOOOOOOOOOOOOOOO
+O O   O           O O
+O O O O OOOOOOO O O O
+O O O O       O O O O
+O O O OOOOOOOOO O O O
+O O O O       O O   O
+O O O O OOOOO O OOOOO
+O O O O     O O O   O
+O OOO OOO O O O O O O
+O     O   O O O O O O
+OOO OOOOOOO O O OOO O
+O     O     O O   O O
+OOOOO O OOOOO OOO O O
+O   O     O     O O O
+O O OOOOO OOO O O O O
+O O     O O   O   O O
+O OOOOO O O OOO OOO O
+O O   O O O   O O   O
+O O O O OOOOO O O O O
+O   O O       O   O O
+OOOOOOOOOOOOOOOOOOO O
