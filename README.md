@@ -15,7 +15,7 @@ POST /labs
 
 _Note: It is assumed the labyrinth itself is always well formed._
 
-Examples:
+
 
 ##### Example 1: Create and store well formed labyrinth
 
