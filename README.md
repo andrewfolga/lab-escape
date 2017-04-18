@@ -119,3 +119,18 @@ Please run the following:
 ```
 
 And the server will be available under the following address: `http://localhost:8081/labescape`
+
+
+Additional task:
+
+User Story 1
+------------
+
+As a world famous explorer of Mazes I would like a maze to exist
+So that I can explore it
+
+Acceptance Criteria
+
+* A Maze (as defined in Maze1.txt consists of walls 'X', Empty spaces ' ', one and only one Start point 'S' and one and only one exit 'F'
+* After a maze has been created the number of walls and empty spaces should be available to me
+* After a maze has been created I should be able to put in a co ordinate and know what exists at that point

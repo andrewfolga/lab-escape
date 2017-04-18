@@ -13,7 +13,7 @@ import java.util.Stack;
  * Please implement your solution here
  */
 @Component
-public class LabEscape {
+public class DFSLabEscape {
 
     private static final char WALL = 'O';
     private static final char FREE = ' ';
@@ -22,10 +22,10 @@ public class LabEscape {
     /**
      * @param labyrinth A labyrinth drawn on a matrix of characters. It's at least 4x4, can be a rectangle or a square.
      *                  Walkable areas are represented with a space character, walls are represented with a big O character.
-     *                  The tryEscapeDepthFirstSearch point is always on the border (see README)
-     * @param startX    Starting row number for the tryEscapeDepthFirstSearch. 0 based.
-     * @param startY    Starting column number for the tryEscapeDepthFirstSearch. 0 based.
-     * @return          A char matrix with the same labyrinth and a path drawn from the starting point to the tryEscapeDepthFirstSearch
+     *                  The tryEscape point is always on the border (see README)
+     * @param startX    Starting row number for the tryEscape. 0 based.
+     * @param startY    Starting column number for the tryEscape. 0 based.
+     * @return          A char matrix with the same labyrinth and a path drawn from the starting point to the tryEscape
      * @throws          NoEscapeException when no path exists to the outside, from the selected starting point
      */
     public char[][] drawPathForEscape(char[][] labyrinth, int startX, int startY) throws NoEscapeException {
@@ -33,12 +33,12 @@ public class LabEscape {
 
         PathFinder pathFinder = new PathFinder(labyrinth, startX, startY);
 
-        return pathFinder.tryEscapeDepthFirstSearch();
+        return pathFinder.tryEscape();
     }
 
     static class PathFinder {
 
-        private final static Logger LOG = LoggerFactory.getLogger(tide.labyrinth.domain.LabEscape.PathFinder.class);
+        private final static Logger LOG = LoggerFactory.getLogger(DFSLabEscape.PathFinder.class);
         private final static String LOG_CONTEXT_MSG = "Context: currentDirection=%s, rightRotationCount=%s, walked=%s, visited=%s";
 
         private static final Direction STARTING_DIRECTION = Direction.UP;
@@ -58,7 +58,7 @@ public class LabEscape {
             this.rightRotationCount = 0;
         }
 
-        public char[][] tryEscapeDepthFirstSearch() throws NoEscapeException {
+        public char[][] tryEscape() throws NoEscapeException {
             try {
                 while (true) {
                     if (hasTriedAllPaths()) {

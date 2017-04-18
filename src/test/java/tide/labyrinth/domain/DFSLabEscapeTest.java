@@ -9,9 +9,9 @@ import static org.junit.Assert.assertThat;
 /**
  * Created by andrzejfolga on 09/04/2017.
  */
-public class LabEscapeTest {
+public class DFSLabEscapeTest {
 
-    private LabEscape labEscape = new LabEscape();
+    private DFSLabEscape DFSLabEscape = new DFSLabEscape();
 
     @Test
     public void shouldHandleStandardLabyrinth() throws Exception {
@@ -24,7 +24,7 @@ public class LabEscapeTest {
                 {' ',' ',' ',' ','O'},
                 {'O','O','O','O','O'}};
 
-        char[][] escapePath = labEscape.drawPathForEscape(labyrinth, 2, 1);
+        char[][] escapePath = DFSLabEscape.drawPathForEscape(labyrinth, 2, 1);
 
         char[][] correctEscapePath = new char[][]{
                 {'O','O','O','O','O'},
@@ -43,7 +43,7 @@ public class LabEscapeTest {
                 {'O','O','O'},
                 {'O',' ','O'}};
 
-        char[][] escapePath = labEscape.drawPathForEscape(labyrinth, 1, 1);
+        char[][] escapePath = DFSLabEscape.drawPathForEscape(labyrinth, 1, 1);
 
         char[][] correctEscapePath = new char[][]{
                 {'O','O','O'},
@@ -63,7 +63,7 @@ public class LabEscapeTest {
                 {'O',' ',' ',' ','O'},
                 {'O','O','O','O','O'}};
 
-        char[][] escapePath = labEscape.drawPathForEscape(labyrinth, 4, 1);
+        char[][] escapePath = DFSLabEscape.drawPathForEscape(labyrinth, 4, 1);
 
         char[][] correctEscapePath = new char[][]{
                 {'O','O','O','O','O'},
@@ -87,7 +87,7 @@ public class LabEscapeTest {
                 {'O','O',' ',' ',' ','O'},
                 {'O','O','O','O','O','O'}};
 
-        char[][] escapePath = labEscape.drawPathForEscape(labyrinth, 4, 2);
+        char[][] escapePath = DFSLabEscape.drawPathForEscape(labyrinth, 4, 2);
 
         char[][] correctEscapePath = new char[][]{
                 {'O','O','O','O','O','O'},
@@ -111,7 +111,7 @@ public class LabEscapeTest {
                 {'O',' ',' ',' ','O'},
                 {'O','O','O','O','O'}};
 
-        labEscape.drawPathForEscape(labyrinth, 2, 1);
+        DFSLabEscape.drawPathForEscape(labyrinth, 2, 1);
     }
 
     @Test
@@ -125,7 +125,7 @@ public class LabEscapeTest {
                 {'O',' ','O',' ','O'},
                 {'O',' ','O','O','O'}};
 
-        char[][] escapePath = labEscape.drawPathForEscape(labyrinth, 4, 1);
+        char[][] escapePath = DFSLabEscape.drawPathForEscape(labyrinth, 4, 1);
 
         char[][] correctEscapePath = new char[][]{
                 {'O','O','O','O','O'},
@@ -149,7 +149,7 @@ public class LabEscapeTest {
                 {'O','O','O',' ','O'},
                 {'O',' ','O','O','O'}};
 
-        labEscape.drawPathForEscape(labyrinth, 4, 1);
+        DFSLabEscape.drawPathForEscape(labyrinth, 4, 1);
     }
 
 }
