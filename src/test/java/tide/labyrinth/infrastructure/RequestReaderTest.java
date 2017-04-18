@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+import tide.labyrinth.domain.LabyrinthData;
+import tide.labyrinth.infrastructure.messaging.RequestReader;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -27,8 +29,8 @@ public class RequestReaderTest {
 
         InputStream inputStream = new ByteArrayInputStream(String.valueOf(INPUT_DATA_STRING).getBytes());
 
-        InputData inputData = requestReader.readInputData(inputStream);
+        LabyrinthData labyrinthData = requestReader.readInputData(inputStream);
 
-        Assert.assertThat(inputData, is(equalTo(new InputData(1, 1, LABYRINTH))));
+        Assert.assertThat(labyrinthData, is(equalTo(new LabyrinthData(1, 1, 8, 1, LABYRINTH))));
     }
 }

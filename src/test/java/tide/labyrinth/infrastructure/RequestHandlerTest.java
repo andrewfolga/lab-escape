@@ -1,6 +1,5 @@
 package tide.labyrinth.infrastructure;
 
-import com.sun.net.httpserver.HttpExchange;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,20 +7,26 @@ import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import tide.labyrinth.domain.DFSLabEscape;
+import tide.labyrinth.domain.LabManager;
+import tide.labyrinth.domain.LabNotFoundException;
 import tide.labyrinth.domain.NoEscapeException;
+import tide.labyrinth.domain.LabyrinthData;
+import tide.labyrinth.infrastructure.messaging.RequestHandler;
+import tide.labyrinth.infrastructure.messaging.RequestReader;
 
 import java.io.BufferedInputStream;
-import java.net.URI;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.OK;
 
 /**
  * Created by andrzejfolga on 10/04/2017.
@@ -32,60 +37,53 @@ public class RequestHandlerTest {
     @Mock
     RequestReader requestReader;
     @Mock
-    DFSLabEscape labEscapeDFS;
-
-    public static final String LABYRINTH = "OOO\nO O\nOOO";
+    LabManager labManager;
 
     @InjectMocks
     private RequestHandler requestHandler;
 
+    private static final int NUMBER_OF_WALLS = 3;
+    private static final int NUMBER_OF_EMPTY_SPACES = 5;
+    private static final String LAB_KEY ="LAB_KEY";
+
     @Before
     public void setUp() throws Exception {
-        requestHandler = new RequestHandler(requestReader, labEscapeDFS);
+        requestHandler = new RequestHandler(requestReader, labManager);
     }
 
     @Test
     public void shouldFindEscapeForLabyrinth() throws Exception {
 
-        InputData inputData = new InputData(1,1, new char[][] {});
-        when(requestReader.readInputData(any(BufferedInputStream.class))).thenReturn(inputData);
-        when(labEscapeDFS.drawPathForEscape(inputData.getLabyrinth(), inputData.getStartPosX(), inputData.getStartPosY())).thenReturn(inputData.getLabyrinth());
+        LabyrinthData labyrinthData = new LabyrinthData(1,1, NUMBER_OF_WALLS, NUMBER_OF_EMPTY_SPACES, new char[][] { {'O','O','O'},{'O',' ','O'},{'O',' ','O'}});
+        when(labManager.drawPathForEscape(LAB_KEY)).thenReturn(labyrinthData.getLabyrinth());
 
-        requestHandler.labescape(LABYRINTH);
+        requestHandler.labEscape(LAB_KEY);
 
-        InOrder inOrder = inOrder(requestReader, labEscapeDFS);
-        inOrder.verify(requestReader).readInputData(any(BufferedInputStream.class));
-        inOrder.verify(labEscapeDFS).drawPathForEscape(inputData.getLabyrinth(), inputData.getStartPosX(), inputData.getStartPosY());
-        inOrder.verifyNoMoreInteractions();
+        verify(labManager).drawPathForEscape(LAB_KEY);
+        verifyNoMoreInteractions(labManager);
     }
 
     @Test
     public void shouldFailToFindEscapeForImpossibleLabyrinth() throws Exception {
 
-        InputData inputData = new InputData(1,1, new char[][] {});
-        when(requestReader.readInputData(any(BufferedInputStream.class))).thenReturn(inputData);
-        when(labEscapeDFS.drawPathForEscape(inputData.getLabyrinth(), inputData.getStartPosX(), inputData.getStartPosY())).thenThrow(NoEscapeException.class);
+        when(labManager.drawPathForEscape(LAB_KEY)).thenThrow(NoEscapeException.class);
 
-        requestHandler.labescape(LABYRINTH);
+        ResponseEntity responseEntity = requestHandler.labEscape(LAB_KEY);
 
-        InOrder inOrder = inOrder(requestReader, labEscapeDFS);
-        inOrder.verify(requestReader).readInputData(any(BufferedInputStream.class));
-        inOrder.verify(labEscapeDFS).drawPathForEscape(inputData.getLabyrinth(), inputData.getStartPosX(), inputData.getStartPosY());
-        inOrder.verifyNoMoreInteractions();
+        assertThat(responseEntity.getStatusCode(), is(OK));
+        verify(labManager).drawPathForEscape(LAB_KEY);
+        verifyNoMoreInteractions(labManager);
     }
 
     @Test
-    public void shouldFailToFindEscapeForLabyrinthDueToInvalidStartingPointCoordinates() throws Exception {
+    public void shouldFailToFindEscapeForLabyrinthDueToNonExistentLabyrinth() throws Exception {
 
-        InputData inputData = new InputData(1,1, new char[][] {});
-        when(requestReader.readInputData(any(BufferedInputStream.class))).thenReturn(inputData);
-        when(labEscapeDFS.drawPathForEscape(inputData.getLabyrinth(), inputData.getStartPosX(), inputData.getStartPosY())).thenThrow(IllegalArgumentException.class);
+        when(labManager.drawPathForEscape(LAB_KEY)).thenThrow(LabNotFoundException.class);
 
-        requestHandler.labescape(LABYRINTH);
+        ResponseEntity responseEntity = requestHandler.labEscape(LAB_KEY);
 
-        InOrder inOrder = inOrder(requestReader, labEscapeDFS);
-        inOrder.verify(requestReader).readInputData(any(BufferedInputStream.class));
-        inOrder.verify(labEscapeDFS).drawPathForEscape(inputData.getLabyrinth(), inputData.getStartPosX(), inputData.getStartPosY());
-        inOrder.verifyNoMoreInteractions();
+        assertThat(responseEntity.getStatusCode(), is(INTERNAL_SERVER_ERROR));
+        verify(labManager).drawPathForEscape(LAB_KEY);
+        verifyNoMoreInteractions(labManager);
     }
 }

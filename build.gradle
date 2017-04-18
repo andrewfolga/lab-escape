@@ -8,8 +8,6 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 compileJava.options.compilerArgs << "-XDignore.symbol.file"
-//apply plugin:'application'
-//mainClassName = "tide.labyrinth.Main"
 
 sourceCompatibility = 1.8
 

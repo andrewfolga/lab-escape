@@ -1,14 +1,5 @@
 package tide.labyrinth;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.entity.ContentType;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,22 +8,10 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import tide.labyrinth.infrastructure.RequestHandler;
+import tide.labyrinth.infrastructure.messaging.RequestHandler;
 
-import java.io.*;
-import java.net.URI;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.stream.IntStream;
-
-import static junit.framework.TestCase.fail;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.eq;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 /**
@@ -46,34 +25,69 @@ public class LabEscapeITest {
     private TestRestTemplate restTemplate;
 
     @Test
-    public void shouldCopeUnderLoad() throws Exception {
-        InputStream inputDataStream = Files.newInputStream(FileSystems.getDefault().getPath("data", "large.txt"));
-        String stringInput= IOUtils.toString(inputDataStream);
+    public void shouldBuildANewLabyrinthAndReturnKey() throws Exception {
+        String stringInput = "1 1\nOOO\nO O\nOOO";
 
-        IntStream.range(0, 1000).parallel().forEach(e -> {
-            try {
+        ResponseEntity<String> labEntity = restTemplate.postForEntity("/labs", stringInput, String.class);
 
-                ResponseEntity<String> response = restTemplate.postForEntity("/labescape", stringInput, String.class);
-
-                BufferedReader rd = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(response.getBody().getBytes())));
-                rd.lines().limit(1).forEach(l -> assertThat(l, not(equalTo(RequestHandler.NO_ESCAPE_PATH))));
-            } catch (Exception ex) {
-                System.out.println(ex);
-                fail();
-            }
-        });
+        assertThat(labEntity.getStatusCode(), is(HttpStatus.OK));
+        assertThat(labEntity.getBody(), is(equalTo("1133")));
     }
-
 
     @Test
     public void shouldReturnInternalServerErrorIfIncorrectInput() throws Exception {
-        String stringInput = "test input";
+        String stringInput = "testInput";
 
-        ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity("/labescape", stringInput, String.class);
+        ResponseEntity<String> labEntity = restTemplate.postForEntity("/labs", stringInput, String.class);
 
-        Assert.assertThat(stringResponseEntity.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+        assertThat(labEntity.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
+    @Test
+    public void shouldFailToBuildANewLabyrinthWithIncorrectStartCoordinates() throws Exception {
+        String stringInput = "3 3\nOOO\nO O\nOOO";
+
+        ResponseEntity<String> labEntity = restTemplate.postForEntity("/labs", stringInput, String.class);
+
+        assertThat(labEntity.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+    }
+
+    @Test
+    public void shouldGetLabyrinthWithStats() throws Exception {
+        String stringInput = "1 1\nOOO\nO O\nO O";
+        ResponseEntity<String> labEntity = restTemplate.postForEntity("/labs", stringInput, String.class);
+        String insertedKey = labEntity.getBody();
+
+        ResponseEntity<String> getValueEntity = restTemplate.getForEntity("/labs/"+insertedKey, String.class);
+
+        assertThat(getValueEntity.getStatusCode(), is(HttpStatus.OK));
+        assertThat(getValueEntity.getBody(), containsString("numberOfEmptySpaces=2"));
+        assertThat(getValueEntity.getBody(), containsString("numberOfWalls=7"));
+    }
+
+    @Test
+    public void shouldGetAValueForCoordinates() throws Exception {
+        String stringInput = "1 1\nOOO\nO O\nO O";
+        ResponseEntity<String> labEntity = restTemplate.postForEntity("/labs", stringInput, String.class);
+        String insertedKey = labEntity.getBody();
+
+        ResponseEntity<Character> getValueEntity = restTemplate.getForEntity("/labs/"+insertedKey+"/coordX/1/coordY/2", Character.class);
+        assertThat(getValueEntity.getStatusCode(), is(HttpStatus.OK));
+        assertThat(getValueEntity.getBody(), is(equalTo('O')));
+        getValueEntity = restTemplate.getForEntity("/labs/"+insertedKey+"/coordX/2/coordY/1", Character.class);
+        assertThat(getValueEntity.getStatusCode(), is(HttpStatus.OK));
+        assertThat(getValueEntity.getBody(), is(equalTo(' ')));
+    }
+
+    @Test
+    public void shouldReturnInternalServerErrorIfLabDoesNotExist() throws Exception {
+        String stringInput = "1 1\nOOO\nO O\nO O";
+        restTemplate.postForEntity("/labs", stringInput, String.class);
+
+        ResponseEntity<Character> getValueEntity = restTemplate.getForEntity("/labs/1132/coordX/1/coordY/2", Character.class);
+
+        assertThat(getValueEntity.getStatusCode(), is(HttpStatus.NOT_FOUND));
+    }
 
     @Test
     public void shouldFailToFindHandlerForIncorrectURL() throws Exception {
@@ -81,7 +95,17 @@ public class LabEscapeITest {
 
         ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity("/doesNotExist", stringInput, String.class);
 
-        Assert.assertThat(stringResponseEntity.getStatusCode(), is(HttpStatus.NOT_FOUND));
+        assertThat(stringResponseEntity.getStatusCode(), is(HttpStatus.NOT_FOUND));
+    }
+
+    @Test
+    public void shouldEscapeExistingLabyrinth() throws Exception {
+        String stringInput = "1 1\nOOO\nO O\nO O";
+        ResponseEntity<String> labEntity = restTemplate.postForEntity("/labs", stringInput, String.class);
+
+        ResponseEntity<String> escapeEntity = restTemplate.postForEntity("/labs/"+labEntity.getBody()+"/escape", stringInput, String.class);
+        assertThat(escapeEntity.getStatusCode(), is(HttpStatus.OK));
+        assertThat(escapeEntity.getBody(), is(equalTo("OOO\nO•O\nO•O")));
     }
 
 }
