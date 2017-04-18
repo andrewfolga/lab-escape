@@ -115,16 +115,23 @@ Running instructions
 Please run the following:
 
 ```
-./gradlew run
+./gradlew clean build
 ```
 
-And the server will be available under the following address: `http://localhost:8081/labescape`
+The standalone executable is then put in `build/libs`: 
+
+```
+java -jar build/libs/labescape-1.0-SNAPSHOT.jar
+```
+
+And the server will be available under the following address: `http://localhost:8080/labescape`
 
 
-Additional task:
+###Additional task:
 
-User Story 1
-------------
+
+#####User Story 1
+
 
 As a world famous explorer of Mazes I would like a maze to exist
 So that I can explore it
