@@ -17,7 +17,7 @@ _Note: It is assumed the labyrinth itself is always well formed._
 
 Examples:
 
-#### Example 1: Create and store well formed labyrinth
+##### Example 1: Create and store well formed labyrinth
 
 
 **Request url**
@@ -55,7 +55,7 @@ Retrieves labyrinth with additional statistics like number of walls and number o
 GET /labs/{labKey}
 ```
 
-#### Example 1: Get labyrinth
+##### Example 1: Get labyrinth
 
 
 **Request url**
@@ -71,7 +71,7 @@ GET /labs/13108
 |------------|----------------------------------------------------------------|
 |200         | The labyrinth data including the additional statistics         |
 
-#### Example 2: Labyrinth does not exist
+##### Example 2: Labyrinth does not exist
 
 
 **Request url**
@@ -93,7 +93,7 @@ Finds a value in the labyrinth given the key, x and y coordinates.
 GET /labs/{labKey}/coordX/{x}/coordY/{y}
 ```
 
-#### Example 1: Find value for labyrinth
+##### Example 1: Find value for labyrinth
 
 
 **Request url**
@@ -110,7 +110,7 @@ GET /labs/13108/coordX/0/coordY/0
 |200         | The given labyrinth value positioned within x and y coordinates |
 
 
-#### Example 2: Labyrinth does not exist
+##### Example 2: Labyrinth does not exist
 
 
 **Request url**
